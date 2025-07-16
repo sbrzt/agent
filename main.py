@@ -11,30 +11,47 @@ client = genai.Client(api_key=api_key)
 
 def main():
 
-    if len(sys.argv) > 1:
-        if type(sys.argv[1]) == str:
-            user_prompt = sys.argv[1]
-            messages = [
-                genai.types.Content(
-                    role="user",
-                    parts=[
-                        genai.types.Part(
-                            text=user_prompt
-                        ),
-                    ]
-                )
-            ]
-            response = client.models.generate_content(
-                model="gemini-2.0-flash-001", 
-                contents=messages,
+    parser = argparse.ArgumentParser(
+        description="Generate a response using Gemini"
+        )
+    parser.add_argument(
+        "prompt", 
+        help="Prompt to send to Gemini"
+        )
+    parser.add_argument(
+        "--verbose", 
+        action="store_true", 
+        help="Enable verbose output"
+        )
+    args = parser.parse_args()
+
+    if args.prompt:
+        messages = [
+            genai.types.Content(
+                role="user",
+                parts=[
+                    genai.types.Part(
+                        text=args.prompt
+                    ),
+                ]
             )
+        ]
+
+        response = client.models.generate_content(
+            model="gemini-2.0-flash-001", 
+            contents=messages,
+        )
+
+        print(response.text)
+
+        if args.verbose:
+            print(f"User prompt: {args.prompt}")
+            print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
+            print(f"Response tokens: {response.usage_metadata.candidates_token_count}") 
+        
     else:
         print("Error: prompt not provided.")
         sys.exit(1)
-    print(response.text)
-    print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
-    print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
-
 
 if __name__ == "__main__":
     main()
