@@ -14,6 +14,9 @@ def get_file_content(working_directory, file_path):
     if not os.path.isfile(full_path):
         return f'Error: File not found or is not a regular file: "{file_path}"'
 
+    if not full_path.endswith(".py"):
+        return f'Error: "{file_path}" is not a Python file.'
+
     with open(full_path, "r") as f:
         contents = f.read(MAX_CHARS)
         if os.path.getsize(full_path) > MAX_CHARS:
