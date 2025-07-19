@@ -5,6 +5,7 @@ import sys
 import argparse
 from dotenv import load_dotenv
 from google import genai
+from config import system_prompt, MODEL_NAME
 
 
 load_dotenv()
@@ -40,8 +41,9 @@ def main():
         ]
 
         response = client.models.generate_content(
-            model="gemini-2.0-flash-001", 
+            model=MODEL_NAME, 
             contents=messages,
+            config=genai.types.GenerateContentConfig(system_instruction=system_prompt)
         )
 
         print(response.text)
