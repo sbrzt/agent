@@ -6,6 +6,7 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from config import system_prompt, MODEL_NAME
+from functions.get_files_info import schema_get_files_info
 
 
 load_dotenv()
@@ -40,13 +41,25 @@ def main():
             )
         ]
 
+        available_functions = genai.types.Tool(
+            function_declarations=[
+                schema_get_files_info,
+            ]
+        )
+
         response = client.models.generate_content(
             model=MODEL_NAME, 
             contents=messages,
-            config=genai.types.GenerateContentConfig(system_instruction=system_prompt)
+            config=genai.types.GenerateContentConfig(
+                tools=[available_functions],
+                system_instruction=system_prompt
+            )
         )
-
-        print(response.text)
+        if response.function_calls:
+            for function_call_part in response.function_calls:
+                print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+        else:
+            print(response.text)
 
         if args.verbose:
             print(f"User prompt: {args.prompt}")
