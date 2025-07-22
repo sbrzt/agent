@@ -24,3 +24,16 @@ def get_file_content(working_directory, file_path):
         return contents
 
     
+schema_get_files_content = genai.types.FunctionDeclaration(
+    name="get_files_content",
+    description="Reads the contents of the files in the specified directory, constrained to the working directory.",
+    parameters=genai.types.Schema(
+        type=genai.types.Type.OBJECT,
+        properties={
+            "file_path": genai.types.Schema(
+                type=genai.types.Type.STRING,
+                description="The path to the files to be read, relative to the working directory.",
+            ),
+        },
+    ),
+)

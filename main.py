@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from google import genai
 from config import system_prompt, MODEL_NAME
 from functions.get_files_info import schema_get_files_info
+from functions.get_file_content import schema_get_files_content
 
 
 load_dotenv()
@@ -44,6 +45,7 @@ def main():
         available_functions = genai.types.Tool(
             function_declarations=[
                 schema_get_files_info,
+                schema_get_files_content
             ]
         )
 
