@@ -30,4 +30,21 @@ def run_python_file(working_directory, file_path, args=[]):
 
     return output
     
-    
+
+schema_run_python_file = genai.types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a Python script in the specified directory, constrained to the working directory.",
+    parameters=genai.types.Schema(
+        type=genai.types.Type.OBJECT,
+        properties={
+            "file_path": genai.types.Schema(
+                type=genai.types.Type.STRING,
+                description="The path to the files to be read, relative to the working directory.",
+            ),
+            "args": genai.types.Schema(
+                type=genai.types.Type.LIST,
+                description="The arguments to be passed in the command used to run the script.",
+            ),
+        },
+    ),
+)
