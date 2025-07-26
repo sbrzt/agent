@@ -8,5 +8,3 @@ An agentic CLI tool that:
         - Overwrite a file's contents
         - Execute the Python interpreter on a file
     - Repeats step 2 until the task is complete or fails
-
-Uses Gemini.

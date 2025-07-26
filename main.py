@@ -7,8 +7,10 @@ from dotenv import load_dotenv
 from google import genai
 from config import system_prompt, MODEL_NAME
 from functions.get_files_info import schema_get_files_info
-from functions.get_file_content import schema_get_files_content
+from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
+from functions.write_file import schema_write_file
+from functions.call_function import call_function
 
 
 load_dotenv()
@@ -46,8 +48,9 @@ def main():
         available_functions = genai.types.Tool(
             function_declarations=[
                 schema_get_files_info,
-                schema_get_files_content,
-                schema_run_python_file
+                schema_get_file_content,
+                schema_run_python_file,
+                schema_write_file
             ]
         )
 
@@ -61,7 +64,13 @@ def main():
         )
         if response.function_calls:
             for function_call_part in response.function_calls:
-                print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+                function_call_result = call_function(function_call_part)
+                if function_call_result.parts[0].function_response.response:
+                    if args.verbose:
+                        print(print(f"-> {function_call_result.parts[0].function_response.response}"))
+                else:
+                    raise Exception
+                
         else:
             print(response.text)
 

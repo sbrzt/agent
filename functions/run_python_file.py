@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+from google import genai
 
 
 def run_python_file(working_directory, file_path, args=[]):
@@ -33,16 +34,18 @@ def run_python_file(working_directory, file_path, args=[]):
 
 schema_run_python_file = genai.types.FunctionDeclaration(
     name="run_python_file",
-    description="Runs a Python script in the specified directory, constrained to the working directory.",
+    description="Runs a Python script in the specified directory, constrained to the working directory. Arguments are optional; if none are provided, use an empty list for 'args'.",
     parameters=genai.types.Schema(
         type=genai.types.Type.OBJECT,
+        required=["file_path"],
         properties={
             "file_path": genai.types.Schema(
                 type=genai.types.Type.STRING,
                 description="The path to the files to be read, relative to the working directory.",
             ),
             "args": genai.types.Schema(
-                type=genai.types.Type.LIST,
+                type=genai.types.Type.ARRAY,
+                items=genai.types.Schema(type=genai.types.Type.STRING),
                 description="The arguments to be passed in the command used to run the script.",
             ),
         },

@@ -1,6 +1,7 @@
 # functions/get_file_content.py
 
 import os
+from google import genai
 from config import MAX_CHARS
 
 
@@ -14,9 +15,6 @@ def get_file_content(working_directory, file_path):
     if not os.path.isfile(full_path):
         return f'Error: File not found or is not a regular file: "{file_path}"'
 
-    if not full_path.endswith(".py"):
-        return f'Error: "{file_path}" is not a Python file.'
-
     with open(full_path, "r") as f:
         contents = f.read(MAX_CHARS)
         if os.path.getsize(full_path) > MAX_CHARS:
@@ -24,8 +22,8 @@ def get_file_content(working_directory, file_path):
         return contents
 
     
-schema_get_files_content = genai.types.FunctionDeclaration(
-    name="get_files_content",
+schema_get_file_content = genai.types.FunctionDeclaration(
+    name="get_file_content",
     description="Reads the contents of the files in the specified directory, constrained to the working directory.",
     parameters=genai.types.Schema(
         type=genai.types.Type.OBJECT,
