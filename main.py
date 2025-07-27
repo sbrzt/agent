@@ -54,34 +54,63 @@ def main():
             ]
         )
 
-        response = client.models.generate_content(
-            model=MODEL_NAME, 
-            contents=messages,
-            config=genai.types.GenerateContentConfig(
-                tools=[available_functions],
-                system_instruction=system_prompt
-            )
-        )
-        if response.function_calls:
-            for function_call_part in response.function_calls:
-                function_call_result = call_function(function_call_part)
-                if function_call_result.parts[0].function_response.response:
-                    if args.verbose:
-                        print(print(f"-> {function_call_result.parts[0].function_response.response}"))
-                else:
-                    raise Exception
-                
-        else:
-            print(response.text)
+        loops = 1
+
+        while loops <= 20:
+            try:
+                response = client.models.generate_content(
+                    model=MODEL_NAME, 
+                    contents=messages,
+                    config=genai.types.GenerateContentConfig(
+                        tools=[available_functions],
+                        system_instruction=system_prompt
+                    )
+                )
+
+                if response.candidates:
+                    for candidate in response.candidates:
+                        messages.append(candidate.content)
+
+                if response.function_calls:
+                    for function_call_part in response.function_calls:
+                        function_call_result = call_function(function_call_part)
+                        if function_call_result.parts[0].function_response.response:
+                            if args.verbose:
+                                print(f"Has function calls: {bool(response.function_calls)}")
+                                print(f"Has text: {bool(response.text)}")
+                                if response.function_calls:
+                                    for fc in response.function_calls:
+                                        print(f" - Calling function: {fc.name}")
+
+                                print(f"-> {function_call_result.parts[0].function_response.response}")
+                            tool_message = genai.types.Content(
+                                role="tool",
+                                parts=[function_call_result.parts[0]]
+                            )
+                            messages.append(tool_message)
+                        else:
+                            raise Exception("Function call failed")
+
+                elif response.text:
+                    print(f"Final response:\n{response.text}")
+                    break
+
+                loops += 1 
+
+            except Exception as e:
+                print(f"Error occurred: {e}")
+                break
 
         if args.verbose:
             print(f"User prompt: {args.prompt}")
             print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
-            print(f"Response tokens: {response.usage_metadata.candidates_token_count}") 
-        
+            print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
+
     else:
         print("Error: prompt not provided.")
         sys.exit(1)
+
+
 
 if __name__ == "__main__":
     main()
