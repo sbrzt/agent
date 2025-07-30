@@ -6,12 +6,15 @@ from functions.get_files_info import get_files_info
 from functions.run_python_file import run_python_file
 from functions.write_file import write_file
 
+from functions.generate_motivating_scenario import generate_motivating_scenario
+
 
 function_map = {
     "get_file_content": get_file_content,
     "get_files_info": get_files_info,
     "run_python_file": run_python_file,
-    "write_file": write_file
+    "write_file": write_file,
+    "generate_motivating_scenario": generate_motivating_scenario
 }
 
 
@@ -32,7 +35,7 @@ def call_function(function_call_part, verbose=False):
         print(f" - Calling function: {function_call_part.name}")
 
     actual_function = function_map[function_call_part.name]
-    result = actual_function(**function_call_part.args, working_directory="./calculator")
+    result = actual_function(**function_call_part.args)
 
     return genai.types.Content(
         role="tool",
