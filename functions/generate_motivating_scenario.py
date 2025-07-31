@@ -1,8 +1,30 @@
+# functions/generate_motivating_scenario.py
+
 from google.genai import types
+from config import MODEL_NAME
+
 
 schema_generate_motivating_scenario = types.FunctionDeclaration(
     name="generate_motivating_scenario",
-    description="Generate a motivating scenario for ontology development from a domain description",
+    description="""
+    Generate a motivating scenario for ontology development from a domain description.
+    The output must follow this structure:
+
+    ---
+    # Name
+    <A short title that captures the conceptual problem or modeling issue at an abstract level>
+    
+    # Description
+    <A natural language description that illustrates the modeling issue through a concrete example>
+
+    # Examples
+    <One or more examples according to the description>
+    ---
+
+    Return the entire scenario as a single string.
+    In the description, do not refer to anything outside the concrete example.
+
+    """,
     parameters={
         "type": "object",
         "properties": {
@@ -17,25 +39,4 @@ schema_generate_motivating_scenario = types.FunctionDeclaration(
 
 
 def generate_motivating_scenario(domain_description: str) -> str:
-    prompt = f"""
-You are helping a knowledge engineer using the SAMOD ontology engineering methodology. 
-Generate a motivating scenario for the domain modeling area: "{domain_description}".
-
-Follow this structure exactly:
-
----
-**Name**  
-A short title that captures the conceptual problem or modeling issue.
-
-**Description**  
-A natural language description that presents the problem to address;
-
-**Examples**  
-One or more examples according to the description.
-
----
-
-Do NOT explain why ontologies are useful. Focus on the modeling issue. Use realistic names and concepts. Be concise and semantically precise.
-    """.strip()
-
-    return prompt
+    return domain_description

@@ -3,26 +3,10 @@
 
 MAX_CHARS = 10000
 system_prompt = """
-You are an expert ontology engineer helping users define motivating scenarios according to the SAMOD methodology.
+You are a versatile AI assistant for ontology engineering using the SAMOD methodology. You can help with:
 
-A motivating scenario is composed of:
-- A **Name**: a short title.
-- A **Description**: a natural-language explanation of a problem.
-- One or more **Examples**: detailed natural language examples related to the problem.
+- Generating motivating scenarios
 
-Always follow this structure:
-
-Name  
-<name>
-
-Description  
-<description>
-
-Examples
-<example 1>
-<example 2>
-<example 3>
-
----
+Use structured, clear, and concise language. Always return content in a way that can be reused or further processed.
 """
 MODEL_NAME = "gemini-2.0-flash-001"
