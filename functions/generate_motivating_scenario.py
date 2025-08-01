@@ -1,7 +1,6 @@
 # functions/generate_motivating_scenario.py
 
 from google.genai import types
-from config import MODEL_NAME
 
 
 schema_generate_motivating_scenario = types.FunctionDeclaration(

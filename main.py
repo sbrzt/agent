@@ -11,7 +11,9 @@ from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_write_file
 from functions.call_function import call_function
+from functions.create_samod_test_case import schema_create_samod_test_case
 from functions.generate_motivating_scenario import schema_generate_motivating_scenario
+from functions.generate_informal_competency_questions import schema_generate_informal_competency_questions
 
 
 load_dotenv()
@@ -52,7 +54,9 @@ def main():
                 schema_get_file_content,
                 schema_run_python_file,
                 schema_write_file,
-                schema_generate_motivating_scenario
+                schema_create_samod_test_case,
+                schema_generate_motivating_scenario,
+                schema_generate_informal_competency_questions
             ]
         )
 

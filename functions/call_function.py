@@ -6,7 +6,9 @@ from functions.get_files_info import get_files_info
 from functions.run_python_file import run_python_file
 from functions.write_file import write_file
 
+from functions.create_samod_test_case import create_samod_test_case
 from functions.generate_motivating_scenario import generate_motivating_scenario
+from functions.generate_informal_competency_questions import generate_informal_competency_questions
 
 
 function_map = {
@@ -14,7 +16,9 @@ function_map = {
     "get_files_info": get_files_info,
     "run_python_file": run_python_file,
     "write_file": write_file,
-    "generate_motivating_scenario": generate_motivating_scenario
+    "create_samod_test_case": create_samod_test_case,
+    "generate_motivating_scenario": generate_motivating_scenario,
+    "generate_informal_competency_questions": generate_informal_competency_questions
 }
 
 
