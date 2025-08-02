@@ -18,17 +18,17 @@ def create_samod_test_case(test_case_name: str, motivating_scenario: str) -> gen
 
 schema_create_samod_test_case = genai.types.FunctionDeclaration(
     name="create_samod_test_case",
-    description="Creates a SAMOD test case folder and writes the motivating scenario to a file",
+    description="Create a new SAMOD test case folder and save the motivating scenario",
     parameters={
         "type": "object",
         "properties": {
             "test_case_name": {
                 "type": "string",
-                "description": "The name of the SAMOD test case (used as folder name)"
+                "description": "A short name for the test case, used as the folder name"
             },
             "motivating_scenario": {
                 "type": "string",
-                "description": "The full motivating scenario content to write to motivating_scenario.md"
+                "description": "The motivating scenario to be saved in the test case folder"
             }
         },
         "required": ["test_case_name", "motivating_scenario"]
